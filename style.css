@@ -32,90 +32,41 @@ h2 {
     margin-bottom: 20px;
 }
 
+/* --- DARK THEME 基礎樣式 (保留) --- */
+/* ... (保留所有的 :root, body, h2, button 樣式) ... */
+
 /* --- 儀表板面板樣式 --- */
 .dashboard-container {
-    max-width: 600px; 
+    /* 移除 max-width: 600px; 讓三欄有足夠空間 */
+    max-width: 1200px; /* 設定一個較寬的容器 */
     margin: 50px auto; 
-    display: block;
+    
+    /* 關鍵：使用 Flexbox 實現三欄 */
+    display: flex; 
+    gap: 20px; /* 欄位之間的間距 */
 }
 
-.panel {
-    background-color: var(--color-bg-secondary); /* 容器背景 */
+/* 確保每個分類面板平均佔據空間 */
+.category-panel {
+    flex: 1; /* 讓三個面板平均分配空間 */
+    min-width: 300px; /* 確保在小螢幕上不會縮得太小 */
+    background-color: var(--color-bg-secondary); 
     border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* 增加陰影深度 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); 
     padding: 25px;
+    display: flex; /* 使用 flex 讓內容（如按鈕）更容易對齊 */
+    flex-direction: column;
 }
 
-/* --- 連結區域樣式 --- */
-.links-panel a {
-    display: block;
-    padding: 12px 15px;
-    margin-bottom: 8px;
-    background-color: var(--color-border); /* 連結項目背景 */
-    color: var(--color-accent); /* 連結文字使用強調色 */
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.2s;
-    font-size: 1.1em;
-}
-
-.links-panel a:hover {
-    background-color: #4a4d6e; /* 懸停時略微變亮 */
-}
-
-/* --- 按鈕樣式 --- */
-button {
-    padding: 10px 20px;
-    font-size: 1em;
-    background-color: var(--color-accent); /* 按鈕使用強調色 */
-    color: var(--color-bg-primary); /* 按鈕文字使用深色 */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-    font-weight: bold;
-}
-
-button:hover {
-    background-color: var(--color-accent-hover);
-    transform: translateY(-1px);
-}
-
-/* --- 彈窗 (Modal) 樣式 --- */
-.modal {
-    position: fixed;
-    z-index: 10;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.8); /* 更深的半透明背景 */
-    display: none;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background-color: var(--color-bg-secondary);
-    color: var(--color-text-primary);
-    padding: 30px;
-    border-radius: 10px;
-    width: 80%;
-    max-width: 550px;
-    box-shadow: 0 0 20px var(--color-accent);
-}
-
-.modal-content h3, .modal-content p {
-    color: var(--color-text-secondary);
-}
-
-#linksInput {
-    width: 95%;
-    padding: 10px;
+/* 連結清單容器 */
+.linksList {
+    flex-grow: 1; /* 讓清單佔據大部分空間 */
     margin-bottom: 15px;
-    border: 1px solid var(--color-border);
-    background-color: #383a59; /* 輸入框背景色 */
-    color: var(--color-text-primary);
-    resize: vertical; /* 允許垂直拖拉大小 */
 }
+
+/* 確保編輯按鈕總是在底部 */
+.category-panel button {
+    margin-top: auto; /* 將按鈕推到底部 */
+}
+
+/* ... (保留 .links-panel a 和 .modal 等樣式) ... */

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的快速存取首頁</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dashboard-container { 
+            max-width: 600px; 
+            margin: 50px auto; 
+            display: block; /* 移除 Flexbox */
+        }
+        .links-panel a {
+            display: block;
+            padding: 10px;
+            margin-bottom: 5px;
+            background-color: #e3f2fd;
+            color: #1565c0;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        .links-panel a:hover {
+            background-color: #bbdefb;
+        }
+        #linksInput {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <div class="panel links-panel">
+            <h2>🔗 常用快速連結</h2>
+            <div id="linksList">
+                </div>
+            <button id="openLinkSettings" style="margin-top: 20px;">編輯連結</button>
+        </div>
+    </div>
+
+    <div id="linkSettingsModal" class="modal">
+        <div class="modal-content">
+            <h3>編輯連結清單</h3>
+            <p>請使用 **名稱 | 網址** 格式，每行一個。</p>
+            <textarea id="linksInput" rows="15"></textarea>
+            <button id="saveLinkSettings">保存並更新</button>
+            <button id="closeLinkModal" class="close-modal">關閉</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

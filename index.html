@@ -32,13 +32,26 @@
         </div>
 
         <div class="panel task-panel">
-            <h2>✅ 待辦事項</h2>
-            <div id="taskList">
-                </div>
-            
-            <div class="task-input-area">
-                <input type="text" id="newTaskInput" placeholder="點擊這裡輸入新的 Task，按 Enter 新增">
+        <h2>✅ 待辦事項</h2>
+        <div id="taskList">
             </div>
+        
+        <div class="task-input-area">
+            <input type="text" id="newTaskInput" placeholder="點擊這裡輸入新的 Task，按 Enter 新增">
+        </div>
+    </div>
+
+    <div id="taskEditModal" class="modal">
+        <div class="modal-content">
+            <h3>編輯待辦事項</h3>
+            <textarea id="taskEditText" rows="5"></textarea>
+            
+            <div class="modal-actions">
+                <button id="saveTaskEdit" class="save-button">保存</button>
+                <button id="deleteTask" class="delete-button">刪除</button>
+                <button id="closeTaskModal" class="close-modal">取消</button>
+            </div>
+            <input type="hidden" id="currentEditingTaskId">
         </div>
     </div>
 

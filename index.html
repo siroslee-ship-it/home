@@ -37,4 +37,24 @@
                 </div>
             
             <div class="task-input-area">
-                <input type="text" id="newTaskInput" placeholder="點擊
+                <input type="text" id="newTaskInput" placeholder="點擊這裡輸入新的 Task，按 Enter 新增">
+            </div>
+        </div>
+    </div>
+
+    <div id="linkSettingsModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">編輯連結清單</h3>
+            <p>請使用 **名稱 | 網址** 格式，每行一個。</p>
+            
+            <input type="hidden" id="currentEditingCategory"> 
+            
+            <textarea id="linksInput" rows="15"></textarea>
+            <button id="saveLinkSettings">保存並更新</button>
+            <button id="closeLinkModal" class="close-modal">關閉</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

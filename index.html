@@ -3,53 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的分類快速存取首頁</title>
-    <link rel="stylesheet" href="style.css">
-    </head>
+    <title>我的分類快速存取首頁 (四欄)</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
 <body>
 
     <div class="dashboard-container">
         
         <div class="panel category-panel personal-panel">
-        <h2>👤 個人連結</h2>
-        <div id="personalLinksList" class="linksList"></div>
-        <button class="openSettingsBtn" data-category="personal">編輯</button>
-    </div>
-
-    <div class="panel category-panel hobby-panel">
-        <h2>🎮 興趣連結</h2>
-        <div id="hobbyLinksList" class="linksList"></div>
-        <button class="openSettingsBtn" data-category="hobby">編輯</button>
-    </div>
-
-    <div class="panel category-panel work-panel">
-        <h2>💼 工作連結</h2>
-        <div id="workLinksList" class="linksList"></div>
-        <button class="openSettingsBtn" data-category="work">編輯</button>
-    </div>
-
-    <div class="panel task-panel">
-        <h2>✅ 待辦事項</h2>
-        <div id="taskList">
-            </div>
-        
-        <div class="task-input-area">
-            <input type="text" id="newTaskInput" placeholder="點擊新增 Task...">
+            <h2>👤 個人連結</h2>
+            <div id="personalLinksList" class="linksList">
+                </div>
+            <button class="openSettingsBtn" data-category="personal">編輯</button>
         </div>
-    </div>
 
-    <div id="linkSettingsModal" class="modal">
-        <div class="modal-content">
-            <h3 id="modalTitle">編輯連結清單</h3>
-            <p>請使用 **名稱 | 網址** 格式，每行一個。</p>
-            <input type="hidden" id="currentEditingCategory"> 
+        <div class="panel category-panel hobby-panel">
+            <h2>🎮 興趣連結</h2>
+            <div id="hobbyLinksList" class="linksList">
+                </div>
+            <button class="openSettingsBtn" data-category="hobby">編輯</button>
+        </div>
+
+        <div class="panel category-panel work-panel">
+            <h2>💼 工作連結</h2>
+            <div id="workLinksList" class="linksList">
+                </div>
+            <button class="openSettingsBtn" data-category="work">編輯</button>
+        </div>
+
+        <div class="panel task-panel">
+            <h2>✅ 待辦事項</h2>
+            <div id="taskList">
+                </div>
             
-            <textarea id="linksInput" rows="15"></textarea>
-            <button id="saveLinkSettings">保存並更新</button>
-            <button id="closeLinkModal" class="close-modal">關閉</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+            <div class="task-input-area">
+                <input type="text" id="newTaskInput" placeholder="點擊

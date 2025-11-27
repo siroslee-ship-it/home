@@ -33,26 +33,82 @@ h2 {
 }
 
 /* --- 儀表板面板樣式 --- */
-.dashboard-container {
-    /* 移除 max-width: 600px; 讓三欄有足夠空間 */
-    max-width: 1200px; /* 設定一個較寬的容器 */
-    margin: 50px auto; 
-    
-    /* 關鍵：使用 Flexbox 實現三欄 */
+
+/* 調整為四欄佈局 */
+.dashboard-container.four-columns {
     display: flex; 
-    gap: 20px; /* 欄位之間的間距 */
+    gap: 20px;
+    max-width: 1600px; /* 增加最大寬度以容納四欄 */
+    margin: 50px auto; 
 }
 
-/* 確保每個分類面板平均佔據空間 */
-.category-panel {
-    flex: 1; /* 讓三個面板平均分配空間 */
-    min-width: 300px; /* 確保在小螢幕上不會縮得太小 */
-    background-color: var(--color-bg-secondary); 
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); 
-    padding: 25px;
-    display: flex; /* 使用 flex 讓內容（如按鈕）更容易對齊 */
+/* 確保所有面板平均佔據空間 */
+.dashboard-container.four-columns > .panel {
+    flex: 1; 
+    min-width: 250px; 
+}
+
+/* --- Task List 專屬樣式 --- */
+
+.task-panel {
+    display: flex;
     flex-direction: column;
+}
+
+#taskList {
+    flex-grow: 1;
+    overflow-y: auto; /* 如果 Task 太多，允許滾動 */
+    margin-bottom: 15px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.2s;
+}
+
+.task-item:hover {
+    background-color: #383a59;
+    border-radius: 4px;
+}
+
+/* Checkbox 樣式 */
+.task-item input[type="checkbox"] {
+    margin-right: 10px;
+    min-width: 18px; /* 確保 Checkbox 有一定大小 */
+    min-height: 18px;
+    cursor: pointer;
+}
+
+/* Task 文本樣式 */
+.task-text {
+    flex-grow: 1;
+    color: var(--color-text-primary);
+    transition: text-decoration 0.3s;
+}
+
+/* 勾選後的樣式：刪除線和柔和的顏色 */
+.task-completed .task-text {
+    text-decoration: line-through;
+    color: var(--color-text-secondary); /* 柔和的顏色 */
+    opacity: 0.7;
+}
+
+/* Task 輸入框樣式 */
+.task-input-area {
+    margin-top: auto; /* 確保輸入框在底部 */
+}
+
+#newTaskInput {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box; /* 讓 padding 不會撐大寬度 */
+    border: 1px solid var(--color-border);
+    background-color: #383a59;
+    color: var(--color-text-primary);
+    border-radius: 4px;
 }
 
 /* 連結清單容器 */

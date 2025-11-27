@@ -1,5 +1,29 @@
 // script.js
 
+// --- Task 數據鍵 ---
+const TASK_KEY = 'userTasks';
+
+// --- Task 數據結構 ---
+let tasks = JSON.parse(localStorage.getItem(TASK_KEY)) || [
+    { id: 1, text: '更新個人首頁的 Task List 功能', completed: false },
+    { id: 2, text: '檢查 GitHub Pages 部署是否成功', completed: false },
+    { id: 3, text: '發布第一版放置遊戲 MVP', completed: true }
+];
+let nextTaskId = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1;
+
+
+// --- DOM 元素引用 (新增 Task 相關) ---
+const taskListEl = document.getElementById('taskList');
+const newTaskInputEl = document.getElementById('newTaskInput');
+
+
+// --- Task 數據持久化 ---
+
+function saveTasks() {
+    localStorage.setItem(TASK_KEY, JSON.stringify(tasks));
+    console.log('Tasks saved.');
+}
+
 // --- 數據鍵 ---
 const LINK_KEY = 'userLinksByCategory'; // 變更 key 名稱，避免與舊數據衝突
 
@@ -51,6 +75,93 @@ function saveLinks() {
     console.log('連結清單已保存！'); 
 }
 
+// script.js (新增 Task 相關功能)
+
+function renderTasks() {
+    taskListEl.innerHTML = '';
+    
+    // 1. 依據完成狀態分組：未完成在前，已完成在後
+    const sortedTasks = [...tasks].sort((a, b) => a.completed - b.completed);
+
+    sortedTasks.forEach(task => {
+        const item = document.createElement('div');
+        item.className = 'task-item';
+        
+        // 根據狀態添加 completed class
+        if (task.completed) {
+            item.classList.add('task-completed');
+        }
+
+        item.innerHTML = `
+            <input type="checkbox" data-task-id="${task.id}" ${task.completed ? 'checked' : ''}>
+            <span class="task-text">${task.text}</span>
+        `;
+        
+        taskListEl.appendChild(item);
+    });
+    
+    // 重新綁定 Checkbox 的事件
+    attachTaskEventListeners();
+}
+
+
+// --- Task 互動邏輯 ---
+
+function addTask(text) {
+    if (!text.trim()) return;
+    
+    const newTask = {
+        id: nextTaskId++,
+        text: text.trim(),
+        completed: false
+    };
+    tasks.push(newTask);
+    saveTasks();
+    renderTasks();
+}
+
+function toggleTaskCompletion(id) {
+    const task = tasks.find(t => t.id === id);
+    if (task) {
+        task.completed = !task.completed;
+        saveTasks();
+        renderTasks(); // 重新渲染以實現排序和刪除線
+    }
+}
+
+function attachTaskEventListeners() {
+    // 移除舊的監聽器是最佳做法，但對於新手專案，直接重新綁定也可以
+    
+    // 監聽 Checkbox 點擊事件
+    taskListEl.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        // 使用 once:true 確保每個 Checkbox 只被綁定一次
+        checkbox.onclick = function() {
+            // 從 data 屬性獲取 ID，並轉換為數字
+            const taskId = parseInt(this.dataset.taskId); 
+            toggleTaskCompletion(taskId);
+        };
+    });
+}
+
+
+// --- Task 輸入框事件 ---
+
+newTaskInputEl.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        addTask(newTaskInputEl.value);
+        newTaskInputEl.value = ''; // 清空輸入框
+    }
+});
+
+
+// --- 整合到初始化流程 ---
+
+// 在您的初始化區塊 (文件的最底部)
+// 確保 Task 相關功能也被啟動
+loadLinks();
+// loadTasks(); // 已經在變數初始化時載入
+renderLinks();
+renderTasks(); // 啟動 Task List 渲染
 
 // --- 連結顯示邏輯 ---
 

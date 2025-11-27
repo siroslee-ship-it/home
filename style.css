@@ -82,4 +82,136 @@ h2 {
     text-decoration: none;
     border-radius: 4px;
     transition: background-color 0.2s;
-    font-size: 1.1
+    font-size: 1.1em;
+}
+
+.category-panel a:hover {
+    background-color: #4a4d6e;
+}
+
+/* 確保編輯按鈕總是在底部 */
+.category-panel button {
+    margin-top: auto;
+}
+
+
+/* --------------------------------- */
+/* --- Task List 專屬樣式 --- */
+/* --------------------------------- */
+
+#taskList {
+    flex-grow: 1;
+    overflow-y: auto; 
+    margin-bottom: 15px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.2s;
+}
+
+.task-item:hover {
+    background-color: #383a59;
+    border-radius: 4px;
+}
+
+/* Checkbox 樣式 */
+.task-item input[type="checkbox"] {
+    margin-right: 10px;
+    min-width: 18px; 
+    min-height: 18px;
+    cursor: pointer;
+}
+
+/* Task 文本樣式 */
+.task-text {
+    flex-grow: 1;
+    color: var(--color-text-primary);
+    transition: text-decoration 0.3s;
+}
+
+/* 勾選後的樣式：刪除線和柔和的顏色 */
+.task-completed .task-text {
+    text-decoration: line-through;
+    color: var(--color-text-secondary); 
+    opacity: 0.7;
+}
+
+/* Task 輸入框樣式 */
+.task-input-area {
+    margin-top: auto; 
+}
+
+#newTaskInput {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box; 
+    border: 1px solid var(--color-border);
+    background-color: #383a59;
+    color: var(--color-text-primary);
+    border-radius: 4px;
+}
+
+
+/* --------------------------------- */
+/* --- 按鈕與彈窗 (Modal) 樣式 --- */
+/* --------------------------------- */
+
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: var(--color-accent); 
+    color: var(--color-bg-primary); 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: var(--color-accent-hover);
+    transform: translateY(-1px);
+}
+
+/* 彈窗 (Modal) 樣式 */
+.modal {
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.8); 
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    padding: 30px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 550px;
+    box-shadow: 0 0 20px var(--color-accent);
+}
+
+.modal-content h3, .modal-content p {
+    color: var(--color-text-secondary);
+}
+
+#linksInput {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--color-border);
+    background-color: #383a59; 
+    color: var(--color-text-primary);
+    resize: vertical; 
+}

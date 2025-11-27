@@ -81,4 +81,165 @@ function renderLinks() {
         const links = linksByCategory[category];
         const container = linksListEls[category];
 
-        if (!container) return; //
+        if (!container) return; // 避免錯誤
+
+        container.innerHTML = '';
+        
+        if (links.length === 0) {
+            container.innerHTML = `<p style="color: var(--color-text-secondary); font-size: 0.9em;">點擊「編輯」新增連結。</p>`;
+            return;
+        }
+
+        links.forEach(link => {
+            const a = document.createElement('a');
+            a.href = link.url;
+            a.textContent = link.name;
+            a.target = '_blank';
+            container.appendChild(a);
+        });
+    });
+}
+
+
+// --- 編輯功能事件監聽 ---
+
+// 開啟彈窗時
+openSettingsBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const category = e.currentTarget.dataset.category;
+        const currentLinks = linksByCategory[category] || [];
+        
+        // 設置彈窗標題和隱藏欄位
+        modalTitleEl.textContent = `編輯「${e.currentTarget.parentNode.querySelector('h2').textContent.split(' ')[1]}」連結`;
+        currentEditingCategoryEl.value = category;
+
+        // 將當前連結轉換為 "名稱 | 網址" 格式填入 TextArea
+        const linkText = currentLinks.map(link => `${link.name} | ${link.url}`).join('\n');
+        linksInputEl.value = linkText;
+        
+        linkSettingsModal.style.display = 'flex'; // 顯示彈窗
+    });
+});
+
+// 保存按鈕點擊時
+saveLinkBtn.addEventListener('click', () => {
+    const rawText = linksInputEl.value;
+    const editingCategory = currentEditingCategoryEl.value;
+    const newLinks = [];
+    
+    rawText.split('\n').forEach(line => {
+        const trimmedLine = line.trim();
+        if (!trimmedLine) return;
+        
+        const parts = trimmedLine.split('|').map(p => p.trim());
+        
+        if (parts.length >= 2) {
+            newLinks.push({
+                name: parts[0],
+                url: parts[1].startsWith('http') ? parts[1] : `https://${parts[1]}`
+            });
+        }
+    });
+    
+    linksByCategory[editingCategory] = newLinks;
+    
+    saveLinks();
+    renderLinks();
+    linkSettingsModal.style.display = 'none';
+});
+
+// 關閉彈窗
+closeLinkModalBtn.addEventListener('click', () => {
+    linkSettingsModal.style.display = 'none';
+});
+
+
+// ---------------------------------
+// --- Task List 功能 ---
+// ---------------------------------
+
+function renderTasks() {
+    taskListEl.innerHTML = '';
+    
+    // 依據完成狀態分組：未完成在前 (false = 0)，已完成在後 (true = 1)
+    const sortedTasks = [...tasks].sort((a, b) => a.completed - b.completed);
+
+    sortedTasks.forEach(task => {
+        const item = document.createElement('div');
+        item.className = 'task-item';
+        
+        if (task.completed) {
+            item.classList.add('task-completed');
+        }
+
+        item.innerHTML = `
+            <input type="checkbox" data-task-id="${task.id}" ${task.completed ? 'checked' : ''}>
+            <span class="task-text">${task.text}</span>
+        `;
+        
+        taskListEl.appendChild(item);
+    });
+    
+    attachTaskEventListeners();
+}
+
+function toggleTaskCompletion(id) {
+    const task = tasks.find(t => t.id === id);
+    if (task) {
+        task.completed = !task.completed;
+        saveTasks();
+        renderTasks(); // 重新渲染以實現排序和刪除線
+    }
+}
+
+function addTask(text) {
+    if (!text.trim()) return;
+    
+    const newTask = {
+        id: nextTaskId++,
+        text: text.trim(),
+        completed: false
+    };
+    tasks.push(newTask);
+    saveTasks();
+    renderTasks();
+}
+
+function attachTaskEventListeners() {
+    // 監聽 Checkbox 點擊事件
+    taskListEl.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        // 使用 onclick 確保邏輯在每次點擊時運行
+        checkbox.onclick = function() {
+            const taskId = parseInt(this.dataset.taskId); 
+            toggleTaskCompletion(taskId);
+        };
+    });
+}
+
+// --- Task 輸入框事件 ---
+
+newTaskInputEl.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        addTask(newTaskInputEl.value);
+        newTaskInputEl.value = ''; // 清空輸入框
+        e.preventDefault(); // 防止換行
+    }
+});
+
+
+// ---------------------------------
+// --- 網站初始化 ---
+// ---------------------------------
+
+function initializeDashboard() {
+    // 連結初始化
+    loadLinks();
+    renderLinks();
+    
+    // Task 初始化
+    // loadTasks() 已經在變數初始化時完成
+    renderTasks();
+}
+
+// 啟動應用程式
+initializeDashboard();

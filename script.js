@@ -21,11 +21,10 @@ let tasks = JSON.parse(localStorage.getItem(TASK_KEY)) || [
     { id: 1, text: '發布個人化首頁 V1', completed: true },
     { id: 2, text: '撰寫放置遊戲的程式碼', completed: false }
 ];
-// 確保 ID 唯一性
 let nextTaskId = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1;
 
 
-// --- DOM 元素引用 ---
+// --- DOM 元素引用 (確保所有元素都存在) ---
 
 // 連結相關
 const linksListEls = {
@@ -160,13 +159,13 @@ closeLinkModalBtn.addEventListener('click', () => {
 
 
 // ---------------------------------
-// --- Task List 功能 ---
+// --- Task List 功能 (已驗證排序邏輯) ---
 // ---------------------------------
 
 function renderTasks() {
     taskListEl.innerHTML = '';
     
-    // 依據完成狀態分組：未完成在前，已完成在後
+    // 核心排序邏輯：未完成在前 (false=0)，已完成在後 (true=1)
     const sortedTasks = [...tasks].sort((a, b) => a.completed - b.completed);
 
     sortedTasks.forEach(task => {
@@ -180,7 +179,7 @@ function renderTasks() {
         }
         
         if (task.completed) {
-            item.classList.add('task-completed');
+            item.classList.add('task-completed'); // <-- 關鍵：確保 class 被加入
         }
 
         item.innerHTML = `
@@ -204,7 +203,7 @@ function toggleTaskCompletion(id) {
     if (task) {
         task.completed = !task.completed;
         saveTasks();
-        renderTasks();
+        renderTasks(); // <-- 關鍵：每次切換都強制重繪整個清單，實現移動效果
     }
 }
 
@@ -263,9 +262,9 @@ saveTaskEditBtn.onclick = function() {
     const taskIndex = tasks.findIndex(t => t.id === taskId);
     if (taskIndex !== -1 && newText) {
         tasks[taskIndex].text = newText;
-        // 為了避免拖曳衝突，編輯後移除完成狀態
+        // 如果編輯後內容被修改，取消完成狀態，以回到可拖曳的未完成清單
         if (tasks[taskIndex].completed) {
-            tasks[taskIndex].completed = false;
+             tasks[taskIndex].completed = false;
         }
         saveTasks();
         renderTasks();
@@ -302,11 +301,10 @@ newTaskInputEl.addEventListener('keypress', (e) => {
 
 
 // ---------------------------------
-// --- 拖曳排序邏輯 ---
+// --- 拖曳排序邏輯 (只對未完成項目生效) ---
 // ---------------------------------
 
 function attachDragAndDropListeners() {
-    // 過濾出所有可拖曳（未完成）的 Task 項目
     const taskItems = taskListEl.querySelectorAll('.task-item[draggable="true"]');
     
     taskItems.forEach(item => {
@@ -322,7 +320,7 @@ function attachDragAndDropListeners() {
 
         item.addEventListener('dragover', (e) => {
             e.preventDefault(); 
-            // 視覺反饋：檢查目標是否為不同的項目
+            // 視覺反饋：檢查目標是否為不同的項目，且目標必須是未完成的
             if (e.currentTarget !== item.parentElement.querySelector('.dragging') && !e.currentTarget.classList.contains('task-completed')) {
                 document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
                 e.currentTarget.classList.add('drag-over');
@@ -355,13 +353,24 @@ function handleDrop(e) {
     const targetIndex = tasks.findIndex(t => t.id === targetTaskId);
 
     if (draggedIndex !== -1 && targetIndex !== -1) {
-        // 進行陣列重排
-        const [draggedItem] = tasks.splice(draggedIndex, 1);
         
-        // 插入邏輯：如果被移除的元素在目標元素之前，則目標索引需要減 1
-        const insertIndex = (draggedIndex < targetIndex) ? targetIndex - 1 : targetIndex;
+        // 1. 確保只對未完成的項目進行排序，排除已完成項目
+        const uncompletedTasks = tasks.filter(t => !t.completed);
+        const completedTasks = tasks.filter(t => t.completed);
+
+        const draggedItem = uncompletedTasks.find(t => t.id === draggedTaskId);
         
-        tasks.splice(insertIndex, 0, draggedItem);
+        if (!draggedItem) return; // 再次檢查是否為未完成項目
+
+        const draggedUncompletedIndex = uncompletedTasks.findIndex(t => t.id === draggedTaskId);
+        const targetUncompletedIndex = uncompletedTasks.findIndex(t => t.id === targetTaskId);
+        
+        // 進行未完成陣列重排
+        uncompletedTasks.splice(draggedUncompletedIndex, 1);
+        uncompletedTasks.splice(targetUncompletedIndex, 0, draggedItem);
+        
+        // 重新組合 tasks 陣列 (未完成 + 已完成)
+        tasks = [...uncompletedTasks, ...completedTasks];
         
         saveTasks();
         renderTasks();

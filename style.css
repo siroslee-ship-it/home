@@ -62,8 +62,23 @@ h2 {
 }
 
 /* 確保編輯按鈕總是在底部 */
-.category-panel button {
-    margin-top: auto; /* 將按鈕推到底部 */
+/* 修正後的更精確選擇器，確保它匹配 category-panel 內的 a 標籤 */
+.category-panel a {
+    /* 關鍵修改點：讓每個連結佔據一整行 */
+    display: block; 
+    
+    padding: 12px 15px;
+    margin-bottom: 8px; /* 增加連結之間的垂直間距 */
+    background-color: var(--color-border); 
+    color: var(--color-accent); 
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    font-size: 1.1em;
+}
+/* 同時更新 hover 樣式 */
+.category-panel a:hover {
+    background-color: #4a4d6e;
 }
 
 /* --- 連結區域樣式 --- */
